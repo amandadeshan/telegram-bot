@@ -1,0 +1,24 @@
+import os
+from telethon import TelegramClient, events
+
+# Get environment variables
+api_id = os.environ['17602733']
+api_hash = os.environ['c6493ece79bf09cf999d64bdd80ac51f']
+bot_token = os.environ['7785262029:AAEdUvNZXsf3BVsfrIOimhkIDLzveFl1cAo']
+
+# List of channels to monitor
+channels = ['@testruio', '@NCRKINGFREE']  # Replace with actual channel usernames
+filter_keywords = ['signal', 'buy', 'sell']  # Add keywords to filter
+
+# Create the Telegram client
+client = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
+
+@client.on(events.NewMessage(chats=channels))
+async def handler(event):
+    message = event.message.message
+    if any(keyword in message.lower() for keyword in filter_keywords):
+        await client.send_message('YOUR_BOT_USERNAME', message)
+
+# Start the client
+client.start()
+client.run_until_disconnected()
